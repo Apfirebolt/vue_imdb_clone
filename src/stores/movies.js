@@ -4,6 +4,7 @@ import httpClient from "../plugins/interceptor";
 
 export const useMovieStore = defineStore("movie", {
   state: () => ({
+    searchMovies: ref([]),
     topRatedMovies: ref([]),
     lowestRatedMovies: ref([]),
     top250Movies: ref([]),
@@ -14,6 +15,9 @@ export const useMovieStore = defineStore("movie", {
   }),
 
   getters: {
+    getSearchMovies() {
+      return this.searchMovies;
+    },
     getTopRatedMovies() {
       return this.topRatedMovies;
     },
@@ -38,6 +42,18 @@ export const useMovieStore = defineStore("movie", {
   },
 
   actions: {
+    async getSearchMoviesAction(query, page = 1) {
+      try {
+        this.loading = true;
+        const response = await httpClient.get(`imdb/autocomplete?query=${query}`);
+        this.searchMovies = response.data;
+      } catch (error) {
+        console.log(error);
+        return error;
+      } finally {
+        this.loading = false;
+      }
+    },
     async getTopRatedAction(page = 1) {
       try {
         this.loading = true;

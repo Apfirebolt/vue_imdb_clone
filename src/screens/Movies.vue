@@ -58,6 +58,18 @@
           </button>
 
           <button
+            @click="changeTab('searchMovie')"
+            :class="[
+              'px-4 py-2 font-medium text-sm border-b-2 transition-colors',
+              selectedTab === 'searchMovie'
+                ? 'border-primary text-primary'
+                : 'border-transparent text-gray-500 hover:text-gray-700',
+            ]"
+          >
+            Search Movie
+          </button>
+
+          <button
             @click="changeTab('topBoxOffice')"
             :class="[
               'px-4 py-2 font-medium text-sm border-b-2 transition-colors',
@@ -335,6 +347,78 @@
             </div>
           </div>
         </div>
+
+        <div v-if="selectedTab === 'searchMovie'" class="space-y-4">
+          <div class="mb-6">
+            <div class="flex gap-2">
+              <input
+                v-model="searchQuery"
+                @keyup.enter="searchMovies"
+                type="text"
+                placeholder="Search for movies..."
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              />
+              <button
+                @click="searchMovies"
+                :disabled="!searchQuery.trim() || loading"
+                class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Search
+              </button>
+            </div>
+          </div>
+
+          <div
+            v-if="movieResults && movieResults.length > 0"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
+            <div
+              v-for="movie in movieResults"
+              :key="movie.id"
+              class="bg-gray-50 p-4 rounded-lg shadow-md"
+            >
+              <img
+                v-if="movie.primaryImage"
+                :src="movie.primaryImage"
+                :alt="movie.primaryTitle"
+                class="w-full h-48 object-cover rounded-lg mb-3"
+              />
+              <h3 class="font-semibold text-lg mb-2">
+                {{ movie.primaryTitle || movie.title }}
+              </h3>
+              <p class="text-sm text-gray-600 mb-2">
+                {{ movie.releaseDate || movie.release_date }}
+              </p>
+              <p
+                v-if="movie.description"
+                class="text-sm text-gray-700 mb-2 line-clamp-3"
+              >
+                {{ movie.description }}
+              </p>
+              <div class="flex justify-between items-center">
+                <span
+                  v-if="movie.averageRating"
+                  class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm"
+                >
+                  ⭐ {{ movie.averageRating }}
+                </span>
+                <span
+                  v-if="movie.contentRating"
+                  class="bg-gray-200 text-gray-800 px-2 py-1 rounded text-sm"
+                >
+                  {{ movie.contentRating }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div
+            v-else-if="searchQuery && !loading"
+            class="text-center py-8 text-gray-500"
+          >
+            No movies found for "{{ searchQuery }}"
+          </div>
+        </div>
       </div>
     </div>
 
@@ -350,6 +434,8 @@ import axios from "axios";
 import Loader from "../components/Loader.vue";
 
 const movieStore = useMovieStore();
+const searchQuery = ref("");
+const movieResults = computed(() => movieStore.getSearchMovies);
 const topRatedMovies = computed(() => movieStore.getTopRatedMovies);
 const lowestRatedMovies = computed(() => movieStore.getLowestRatedMovies);
 const top250Movies = computed(() => movieStore.getTop250Movies);
@@ -364,6 +450,10 @@ const selectedTab = ref("topRated");
 const changeTab = (tab) => {
   selectedTab.value = tab;
 };
+
+const searchMovies = async () => {
+  await movieStore.getSearchMoviesAction(searchQuery.value);
+};  
 
 onMounted(() => {
   movieStore.getTopRatedAction();
