@@ -51,7 +51,7 @@ export const useConfigStore = defineStore("config", {
         const response = await httpClient.get(
           `imdb/genres`
         );
-        this.genres = response.data.genres;
+        this.genres = response.data;
       } catch (error) {
         console.log(error);
         return error;
