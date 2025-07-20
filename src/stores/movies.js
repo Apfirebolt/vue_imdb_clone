@@ -9,6 +9,7 @@ export const useMovieStore = defineStore("movie", {
     top250Movies: ref([]),
     mostPopularMovies: ref([]),
     topRatedEnglishMovies: ref([]),
+    topBoxOfficeMovies: ref([]),
     loading: ref(false),
   }),
 
@@ -27,6 +28,9 @@ export const useMovieStore = defineStore("movie", {
     },
     getTopRatedEnglishMovies() {
       return this.topRatedEnglishMovies;
+    },
+    getTopBoxOfficeMovies() {
+      return this.topBoxOfficeMovies;
     },
     isLoading() {
       return this.loading;
@@ -79,6 +83,19 @@ export const useMovieStore = defineStore("movie", {
         this.loading = true;
         const response = await httpClient.get('imdb/most-popular-movies');
         this.mostPopularMovies = response.data;
+      } catch (error) {
+        console.log(error);
+        return error;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async getTopBoxOfficeMoviesAction(page = 1) {
+      try {
+        this.loading = true;
+        const response = await httpClient.get('imdb/top-box-office');
+        this.topBoxOfficeMovies = response.data;
       } catch (error) {
         console.log(error);
         return error;
