@@ -2,32 +2,47 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import httpClient from "../plugins/interceptor";
 
-export const useMovieStore = defineStore("movie", {
+export const useIndianMoviesStore = defineStore("indianMovies", {
   state: () => ({
-    movie: ref([]),
-    movieData: ref({}),
+    trendingTamil: ref([]),
+    trendingTelugu: ref([]),
+    topRatedTamil: ref([]),
+    topRatedTelugu: ref([]),
+    topRatedIndianMovies: ref([]),
+    anticipatedMovies: ref([]),
     loading: ref(false),
   }),
 
   getters: {
-    getMovie() {
-      return this.movie;
-    },
     isLoading() {
       return this.loading;
     },
-    getMovieData() {
-      return this.movieData;
+    getTrendingTamil() {
+      return this.trendingTamil;
+    },
+    getTrendingTelugu() {
+      return this.trendingTelugu;
+    },
+    getTopRatedTamil() {
+      return this.topRatedTamil;
+    },
+    getTopRatedTelugu() {
+      return this.topRatedTelugu;
+    },
+    getTopRatedIndianMovies() {
+      return this.topRatedIndianMovies;
+    },
+    getAnticipatedMovies() {
+      return this.anticipatedMovies;
     },
   },
 
   actions: {
-
-    async getMovieAction(payload) {
+    async getTrendingTamilAction(page = 1) {
       try {
         this.loading = true;
-        const response = await httpClient.get(`movies?query=${payload.query}&apiKey=${import.meta.env.VITE_APP_KEY}`);
-        this.movie = response.data.results;
+        const response = await httpClient.get("imdb/india/trending-tamil");
+        this.trendingTamil = response.data;
       } catch (error) {
         console.log(error);
         return error;
@@ -36,11 +51,11 @@ export const useMovieStore = defineStore("movie", {
       }
     },
 
-    async getLatestMovies () {
+    async getTrendingTeluguAction(page = 1) {
       try {
         this.loading = true;
-        const response = await httpClient.get(`movie/latest?api_key=${import.meta.env.VITE_APP_KEY}`);
-        this.movie = response.data;
+        const response = await httpClient.get("imdb/india/trending-telugu");
+        this.trendingTelugu = response.data;
       } catch (error) {
         console.log(error);
         return error;
@@ -49,11 +64,11 @@ export const useMovieStore = defineStore("movie", {
       }
     },
 
-    async getNowPlayingMovies (page = 1, region = "US", language = "en-US") {
+    async getTopRatedTamilAction(page = 1) {
       try {
         this.loading = true;
-        const response = await httpClient.get(`movie/now_playing?api_key=${import.meta.env.VITE_APP_KEY}&region=${region}&language=${language}&page=${page}`);
-        this.movieData = response.data;
+        const response = await httpClient.get("imdb/india/top-rated-tamil-movies");
+        this.topRatedTamil = response.data;
       } catch (error) {
         console.log(error);
         return error;
@@ -62,11 +77,11 @@ export const useMovieStore = defineStore("movie", {
       }
     },
 
-    async getPopularMovies (page = 1) {
+    async getTopRatedTeluguAction(page = 1) {
       try {
         this.loading = true;
-        const response = await httpClient.get(`movie/popular?api_key=${import.meta.env.VITE_APP_KEY}&page=${page}`);
-        this.movieData = response.data;
+        const response = await httpClient.get("imdb/india/top-rated-telugu-movies");
+        this.topRatedTelugu = response.data;
       } catch (error) {
         console.log(error);
         return error;
@@ -75,11 +90,11 @@ export const useMovieStore = defineStore("movie", {
       }
     },
 
-    async getTopRatedMovies (page = 1) {
+    async getTopRatedIndianMoviesAction(page = 1) {
       try {
         this.loading = true;
-        const response = await httpClient.get(`movie/top_rated?api_key=${import.meta.env.VITE_APP_KEY}&page=${page}`);
-        this.movieData = response.data;
+        const response = await httpClient.get("imdb/india/top-rated-indian-movies");
+        this.topRatedIndianMovies = response.data;
       } catch (error) {
         console.log(error);
         return error;
@@ -88,37 +103,11 @@ export const useMovieStore = defineStore("movie", {
       }
     },
 
-    async getUpcomingMovies (page = 1) {
+    async getAnticipatedMoviesAction(page = 1) {
       try {
         this.loading = true;
-        const response = await httpClient.get(`movie/upcoming?api_key=${import.meta.env.VITE_APP_KEY}&page=${page}`);
-        this.movieData = response.data;
-      } catch (error) {
-        console.log(error);
-        return error;
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async getMovieDetails (id) {
-      try {
-        this.loading = true;
-        const response = await httpClient.get(`movie/${id}?api_key=${import.meta.env.VITE_APP_KEY}`);
-        this.movie = response.data;
-      } catch (error) {
-        console.log(error);
-        return error;
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async searchMovie (search = "", page = 1) {
-      try {
-        this.loading = true;
-        const response = await httpClient.get(`search/movie?api_key=${import.meta.env.VITE_APP_KEY}&query=${search}&page=${page}`);
-        this.movieData = response.data;
+        const response = await httpClient.get("imdb/india/upcoming");
+        this.anticipatedMovies = response.data;
       } catch (error) {
         console.log(error);
         return error;
@@ -128,7 +117,13 @@ export const useMovieStore = defineStore("movie", {
     },
 
     resetUrlData() {
-      this.movie = [];
+      this.trendingTamil = ref([]);
+      this.trendingTelugu = ref([]);
+      this.topRatedTamil = ref([]);
+      this.topRatedTelugu = ref([]);
+      this.topRatedIndianMovies = ref([]);
+      this.anticipatedMovies = ref([]);
+      this.loading = ref(false);
     },
   },
 });
