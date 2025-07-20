@@ -19,6 +19,11 @@ const routes = [
         component: () => import('../screens/Movies.vue')
     },
     {
+        path: '/shows',
+        name: 'Shows',
+        component: () => import('../screens/Shows.vue')
+    },
+    {
         path: '/indian-movies',
         name: 'IndianMovies',
         component: () => import('../screens/IndianMovies.vue')

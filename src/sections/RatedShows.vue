@@ -1,7 +1,9 @@
 <template>
   <div class="min-h-screen bg-info flex items-center justify-center">
     <div class="bg-white shadow-lg rounded-lg p-4">
-      <h1 class="text-4xl font-bold text-primary text-center mb-4 mt-16">Movies</h1>
+      <h1 class="text-4xl font-bold text-primary text-center mb-4 mt-16">
+        Shows
+      </h1>
       <p class="text-dark leading-relaxed mb-4">
         Welcome to the Movies section! Here, you can explore a wide variety of
         films from different genres and eras. Whether you're a fan of action,
@@ -10,33 +12,33 @@
 
       <Loader v-if="loading" />
       <div
-        v-if="moviesData && moviesData.length"
+        v-if="ratedShows && ratedShows.length"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6"
       >
         <div
-          v-for="movie in moviesData"
-          :key="movie.id"
+          v-for="show in ratedShows"
+          :key="show.id"
           class="bg-white rounded-lg shadow-md overflow-hidden"
         >
           <img
-            :src="movie.primaryImage"
-            :alt="movie.primaryTitle"
+            :src="show.primaryImage"
+            :alt="show.primaryTitle"
             class="w-full h-64 object-cover"
           />
           <div class="p-4">
-            <h3 class="text-xl font-semibold mb-2">{{ movie.primaryTitle }}</h3>
+            <h3 class="text-xl font-semibold mb-2">{{ show.primaryTitle }}</h3>
             <p class="text-gray-600 text-sm mb-2">
-              {{ movie.startYear }} • {{ movie.runtimeMinutes }} min
+              {{ show.startYear }} • {{ show.runtimeMinutes }} min
             </p>
             <p class="text-gray-800 text-sm mb-3 line-clamp-3">
-              {{ movie.description }}
+              {{ show.description }}
             </p>
             <div class="flex justify-between items-center">
               <span class="text-yellow-500 font-bold"
-                >⭐ {{ movie.averageRating }}/10</span
+                >⭐ {{ show.averageRating }}/10</span
               >
               <span class="text-gray-500 text-sm"
-                >{{ movie.numVotes.toLocaleString() }} votes</span
+                >{{ show.numVotes.toLocaleString() }} votes</span
               >
             </div>
           </div>
@@ -47,28 +49,17 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
-import httpClient from "../plugins/interceptor";
-import axios from "axios";
+import { defineProps } from "vue";
 import Loader from "../components/Loader.vue";
 
-const moviesData = ref(null);
-const loading = ref(false);
-
-const getTop250Movies = async () => {
-  try {
-    loading.value = true;
-    const response = await httpClient.get("imdb/top250-movies");
-
-    moviesData.value = response.data;
-  } catch (error) {
-    console.error("Error fetching movie data:", error);
-  } finally {
-    loading.value = false;
-  }
-};
-
-onMounted(() => {
-  getTop250Movies();
+const props = defineProps({
+  ratedShows: {
+    type: Array,
+    default: () => [],
+  },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
 });
 </script>

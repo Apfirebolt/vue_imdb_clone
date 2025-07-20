@@ -60,6 +60,7 @@ const links = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '/about' },
   { name: 'Movies', href: '/movies' },
+  { name: 'Shows', href: '/shows' },
   { name: 'Indian Movies', href: '/indian-movies' },
 ];
 
