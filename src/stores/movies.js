@@ -4,30 +4,41 @@ import httpClient from "../plugins/interceptor";
 
 export const useMovieStore = defineStore("movie", {
   state: () => ({
-    movie: ref([]),
-    movieData: ref({}),
+    topRatedMovies: ref([]),
+    lowestRatedMovies: ref([]),
+    top250Movies: ref([]),
+    mostPopularMovies: ref([]),
+    topRatedEnglishMovies: ref([]),
     loading: ref(false),
   }),
 
   getters: {
-    getMovie() {
-      return this.movie;
+    getTopRatedMovies() {
+      return this.topRatedMovies;
+    },
+    getLowestRatedMovies() {
+      return this.lowestRatedMovies;
+    },
+    getTop250Movies() {
+      return this.top250Movies;
+    },
+    getMostPopularMovies() {
+      return this.mostPopularMovies;
+    },
+    getTopRatedEnglishMovies() {
+      return this.topRatedEnglishMovies;
     },
     isLoading() {
       return this.loading;
     },
-    getMovieData() {
-      return this.movieData;
-    },
   },
 
   actions: {
-
-    async getMovieAction(payload) {
+    async getTopRatedAction(page = 1) {
       try {
         this.loading = true;
-        const response = await httpClient.get(`movies?query=${payload.query}&apiKey=${import.meta.env.VITE_APP_KEY}`);
-        this.movie = response.data.results;
+        const response = await httpClient.get('imdb/top-rated-english-movies');
+        this.topRatedMovies = response.data;
       } catch (error) {
         console.log(error);
         return error;
@@ -36,11 +47,11 @@ export const useMovieStore = defineStore("movie", {
       }
     },
 
-    async getLatestMovies () {
+    async getLowestRatedAction(page = 1) {
       try {
         this.loading = true;
-        const response = await httpClient.get(`movie/latest?api_key=${import.meta.env.VITE_APP_KEY}`);
-        this.movie = response.data;
+        const response = await httpClient.get('imdb/lowest-rated-movies');
+        this.lowestRatedMovies = response.data;
       } catch (error) {
         console.log(error);
         return error;
@@ -49,11 +60,12 @@ export const useMovieStore = defineStore("movie", {
       }
     },
 
-    async getNowPlayingMovies (page = 1, region = "US", language = "en-US") {
+    async getTop250Action() {
       try {
         this.loading = true;
-        const response = await httpClient.get(`movie/now_playing?api_key=${import.meta.env.VITE_APP_KEY}&region=${region}&language=${language}&page=${page}`);
-        this.movieData = response.data;
+        const response = await httpClient.get('imdb/top250-movies');
+        console.log(response.data);
+        this.top250Movies = response.data;
       } catch (error) {
         console.log(error);
         return error;
@@ -62,11 +74,11 @@ export const useMovieStore = defineStore("movie", {
       }
     },
 
-    async getPopularMovies (page = 1) {
+    async getMostPopularAction(page = 1) {
       try {
         this.loading = true;
-        const response = await httpClient.get(`movie/popular?api_key=${import.meta.env.VITE_APP_KEY}&page=${page}`);
-        this.movieData = response.data;
+        const response = await httpClient.get('imdb/most-popular-movies');
+        this.mostPopularMovies = response.data;
       } catch (error) {
         console.log(error);
         return error;
@@ -75,60 +87,12 @@ export const useMovieStore = defineStore("movie", {
       }
     },
 
-    async getTopRatedMovies (page = 1) {
-      try {
-        this.loading = true;
-        const response = await httpClient.get(`movie/top_rated?api_key=${import.meta.env.VITE_APP_KEY}&page=${page}`);
-        this.movieData = response.data;
-      } catch (error) {
-        console.log(error);
-        return error;
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async getUpcomingMovies (page = 1) {
-      try {
-        this.loading = true;
-        const response = await httpClient.get(`movie/upcoming?api_key=${import.meta.env.VITE_APP_KEY}&page=${page}`);
-        this.movieData = response.data;
-      } catch (error) {
-        console.log(error);
-        return error;
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async getMovieDetails (id) {
-      try {
-        this.loading = true;
-        const response = await httpClient.get(`movie/${id}?api_key=${import.meta.env.VITE_APP_KEY}`);
-        this.movie = response.data;
-      } catch (error) {
-        console.log(error);
-        return error;
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async searchMovie (search = "", page = 1) {
-      try {
-        this.loading = true;
-        const response = await httpClient.get(`search/movie?api_key=${import.meta.env.VITE_APP_KEY}&query=${search}&page=${page}`);
-        this.movieData = response.data;
-      } catch (error) {
-        console.log(error);
-        return error;
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    resetUrlData() {
-      this.movie = [];
+    resetMovieData() {
+      this.topRatedMovies = [];
+      this.lowestRatedMovies = [];
+      this.top250Movies = [];
+      this.mostPopularMovies = [];
+      this.topRatedEnglishMovies = [];
     },
   },
 });

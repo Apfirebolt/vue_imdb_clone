@@ -299,17 +299,17 @@
 
 <script setup>
 import { onMounted, ref, computed } from "vue";
-import { useMoviesStore } from "../stores/movies";
+import { useMovieStore } from "../stores/movies";
 import httpClient from "../plugins/interceptor";
 import axios from "axios";
 import Loader from "../components/Loader.vue";
 
-const movieStore = useMoviesStore();
-const topRatedMovies = computed(() => movieStore.getTopRated);
-const lowestRatedMovies = computed(() => movieStore.getLowestRated);
-const top250Movies = computed(() => movieStore.getTop250);
-const mostPopularMovies = computed(() => movieStore.getMostPopular);
-const topRatedEnglishMovies = computed(() => movieStore.getTopRatedEnglish);
+const movieStore = useMovieStore();
+const topRatedMovies = computed(() => movieStore.getTopRatedMovies);
+const lowestRatedMovies = computed(() => movieStore.getLowestRatedMovies);
+const top250Movies = computed(() => movieStore.getTop250Movies);
+const mostPopularMovies = computed(() => movieStore.getMostPopularMovies);
+const topRatedEnglishMovies = computed(() => movieStore.getTopRatedEnglishMovies);
 const loading = computed(() => movieStore.isLoading);
 const selectedTab = ref("topRated");
 
@@ -322,6 +322,5 @@ onMounted(() => {
   movieStore.getLowestRatedAction();
   movieStore.getTop250Action();
   movieStore.getMostPopularAction();
-  movieStore.getTopRatedEnglishAction();
 });
 </script>
