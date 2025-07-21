@@ -8,6 +8,7 @@ export const useConfigStore = defineStore("config", {
     genres: ref([]),
     countries: ref([]),
     languages: ref([]),
+    countryCodes: ref([]),
     loading: ref(false),
   }),
 
@@ -23,6 +24,9 @@ export const useConfigStore = defineStore("config", {
     },
     getLanguages() {
       return this.languages;
+    },
+    getCountryCodes() {
+      return this.countryCodes;
     },
     isLoading() {
       return this.loading;
@@ -90,11 +94,27 @@ export const useConfigStore = defineStore("config", {
       }
     },
 
+    async getCountryCodesAction() {
+      try {
+        this.loading = true;
+        const response = await httpClient.get(
+          'imdb/upcoming-releases-country-codes'
+        );
+        this.countryCodes = response.data;
+      } catch (error) {
+        console.log(error);
+        return error;
+      } finally {
+        this.loading = false;
+      }
+    },
+
     resetConfigData() {
       this.types = [];
       this.genres = [];
       this.countries = [];
       this.languages = [];
+      this.countryCodes = [];
     },
   },
 });

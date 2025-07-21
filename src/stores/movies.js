@@ -5,6 +5,7 @@ import httpClient from "../plugins/interceptor";
 export const useMovieStore = defineStore("movie", {
   state: () => ({
     searchMovies: ref([]),
+    upcomingMovies: ref([]),
     topRatedMovies: ref([]),
     lowestRatedMovies: ref([]),
     top250Movies: ref([]),
@@ -17,6 +18,9 @@ export const useMovieStore = defineStore("movie", {
   getters: {
     getSearchMovies() {
       return this.searchMovies;
+    },
+    getUpcomingMovies() {
+      return this.upcomingMovies;
     },
     getTopRatedMovies() {
       return this.topRatedMovies;
@@ -120,12 +124,27 @@ export const useMovieStore = defineStore("movie", {
       }
     },
 
+    async getUpcomingMoviesByCountryAction(countryCode, page = 1) {
+      try {
+        this.loading = true;
+        const response = await httpClient.get(`imdb/upcoming-releases?countryCode=${countryCode}&type=MOVIE`);
+        this.upcomingMovies = response.data;
+      } catch (error) {
+        console.log(error);
+        return error;
+      } finally {
+        this.loading = false;
+      }
+    },
+
     resetMovieData() {
       this.topRatedMovies = [];
       this.lowestRatedMovies = [];
       this.top250Movies = [];
       this.mostPopularMovies = [];
       this.topRatedEnglishMovies = [];
+      this.upcomingMovies = [];
+      this.searchMovies = [];
     },
   },
 });

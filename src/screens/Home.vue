@@ -69,6 +69,21 @@
                     </div>
                 </div>
             </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-semibold text-primary mb-4">Country Codes</h3>
+                <div class="max-h-48 overflow-y-auto pr-2">
+                    <div class="grid grid-cols-2 gap-1">
+                        <span
+                            v-for="code in countryCodes"
+                            :key="code"
+                            class="text-xs bg-gray-100 text-dark px-2 py-1 rounded-md"
+                        >
+                            {{ code }}
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <Loader v-if="isLoading" />
@@ -90,11 +105,13 @@ const types = computed(() => configStore.getTypes);
 const genres = computed(() => configStore.getGenres);
 const countries = computed(() => configStore.getCountries);
 const languages = computed(() => configStore.getLanguages);
+const countryCodes = computed(() => configStore.getCountryCodes);
 
-onMounted(async () => {
-    await configStore.getTypesAction();
-    await configStore.getGenresAction();
-    await configStore.getCountriesAction();
-    await configStore.getLanguagesAction();
+onMounted(() => {
+    configStore.getTypesAction();
+    configStore.getGenresAction();
+    configStore.getCountriesAction();
+    configStore.getLanguagesAction();
+    configStore.getCountryCodesAction();
 });
 </script>
