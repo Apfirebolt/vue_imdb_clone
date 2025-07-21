@@ -13,7 +13,6 @@
 
         <!-- Login Form -->
         <form @submit.prevent="handleLogin" class="space-y-6">
-          <!-- Email Field -->
           <div>
             <label
               for="email"
@@ -31,7 +30,6 @@
             />
           </div>
 
-          <!-- Password Field -->
           <div>
             <label
               for="password"
@@ -49,7 +47,6 @@
             />
           </div>
 
-          <!-- Remember Me & Forgot Password -->
           <div class="flex items-center justify-between">
             <div class="flex items-center">
               <input
@@ -67,7 +64,6 @@
             </a>
           </div>
 
-          <!-- Login Button -->
           <button
             type="submit"
             :disabled="loading"

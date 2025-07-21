@@ -54,7 +54,6 @@
 
           <!-- Username and Email Fields Row -->
           <div class="flex space-x-4">
-            <!-- Username Field -->
             <div class="flex-1">
               <label
                 for="username"
@@ -72,7 +71,6 @@
               />
             </div>
 
-            <!-- Email Field -->
             <div class="flex-1">
               <label
                 for="email"
@@ -111,7 +109,6 @@
               />
             </div>
 
-            <!-- Confirm Password Field -->
             <div class="flex-1">
               <label
                 for="confirmPassword"
@@ -130,7 +127,6 @@
             </div>
           </div>
 
-          <!-- Terms Agreement -->
           <div class="flex items-center">
             <input
               id="agreeTerms"
@@ -147,7 +143,6 @@
             </label>
           </div>
 
-          <!-- Register Button -->
           <button
             type="submit"
             :disabled="loading"
