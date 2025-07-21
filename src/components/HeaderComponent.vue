@@ -58,6 +58,8 @@ import { MenuIcon, XIcon } from "@heroicons/vue/outline";
 const isScrolledDown = ref(false);
 const links = [
   { name: 'Home', href: '/' },
+  { name: 'Login', href: '/login' },
+  { name: 'Register', href: '/register' },
   { name: 'About', href: '/about' },
   { name: 'Movies', href: '/movies' },
   { name: 'Shows', href: '/shows' },
