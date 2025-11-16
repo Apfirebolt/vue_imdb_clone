@@ -39,6 +39,11 @@ const routes = [
         component: () => import('../screens/IndianMovies.vue')
     },
     {
+        path: '/suspense',
+        name: 'Suspense',
+        component: () => import('../screens/Suspense.vue')
+    },
+    {
         path: '/:catchAll(.*)',
         name: 'NotFound',
         component: NotFound
