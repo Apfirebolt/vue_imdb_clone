@@ -1,20 +1,21 @@
 <template>
-  <Disclosure :class="['border-b-4 lg:py-2 fixed top-0 z-20 w-full transition-all duration-300', isScrolledDown ? 'bg-dark dark:bg-slate-800' : 'bg-secondary dark:bg-slate-700 dark:text-white']" as="nav" v-slot="{ open }">
+  <Disclosure :class="['border-b border-gray-200/10 backdrop-blur-md fixed top-0 z-20 w-full transition-all duration-300', isScrolledDown ? 'bg-dark/95 dark:bg-slate-900/95 shadow-lg' : 'bg-gradient-to-r from-primary to-dark dark:from-slate-800 dark:to-slate-700']" as="nav" v-slot="{ open }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center h-16">
+      <div class="flex items-center h-20">
         <div class="flex items-center w-full justify-between">
           <div class="justify-between flex items-center">
-            <h2 class="text-2xl text-white font-bold">IMDB Movies</h2>
+            <h2 class="text-3xl text-white font-extrabold tracking-tight flex items-center gap-2">
+              <span class="bg-yellow-400 text-gray-900 px-2 py-1 rounded">IMDB</span>
+              <span class="bg-clip-text text-transparent bg-gradient-to-r from-yellow-200 to-yellow-400">Movies</span>
+            </h2>
           </div>
           <div class="hidden sm:block sm:ml-6">
-            <div class="flex space-x-4">
-              <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-
+            <div class="flex space-x-2">
               <router-link
                 v-for="link in links"
                 :key="link.name"
                 :to="link.href"
-                class="text-white hover:bg-primary transition-all duration-200 hover:text-white px-3 py-2 rounded-md font-medium"
+                class="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm transition-all duration-300 px-4 py-2 rounded-lg font-medium text-sm hover:scale-105 transform"
               >
                 {{ link.name }}
               </router-link>
@@ -23,9 +24,8 @@
         </div>
 
         <div class="-mr-2 flex sm:hidden">
-          <!-- Mobile menu button -->
           <DisclosureButton
-            class="inline-flex items-center justify-center p-2 rounded-md text-info hover:text-white hover:bg-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+            class="inline-flex items-center justify-center p-2 rounded-lg text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/50"
           >
             <span class="sr-only">Open main menu</span>
             <MenuIcon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
@@ -35,13 +35,13 @@
       </div>
     </div>
 
-    <DisclosurePanel class="sm:hidden">
+    <DisclosurePanel class="sm:hidden bg-dark/95 backdrop-blur-md">
       <div class="px-2 pt-2 pb-3 space-y-1">
         <router-link
           v-for="link in links"
           :key="link.name"
           :to="link.href"
-          class="text-gray-300 hover:bg-primary transition-all duration-200 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+          class="text-white/90 hover:text-white hover:bg-white/20 backdrop-blur-sm transition-all duration-300 block px-4 py-3 rounded-lg text-base font-medium"
         >
           {{ link.name }}
         </router-link>
@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { MenuIcon, XIcon } from "@heroicons/vue/outline";
 
@@ -67,20 +67,11 @@ const links = [
 ];
 
 const checkScroll = () => {
-  if (window.scrollY > 100) {
-    isScrolledDown.value = true;
-  } else {
-    isScrolledDown.value = false;
-  }
+  isScrolledDown.value = window.scrollY > 100;
 };
 
-window.addEventListener('scroll', checkScroll);
-
 onMounted(() => {
-  checkScroll();
-});
-
-onMounted(() => {
+  window.addEventListener('scroll', checkScroll);
   checkScroll();
 });
 </script>

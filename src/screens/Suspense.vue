@@ -18,11 +18,7 @@
       </template>
 
       <template #fallback>
-        <div class="text-center p-8 bg-white rounded-lg shadow-inner">
-          <p class="text-xl text-gray-500 font-semibold animate-pulse">
-            Loading data, please wait...
-          </p>
-        </div>
+        <Loader />
       </template>
     </Suspense>
   </div>
@@ -30,6 +26,7 @@
 
 <script setup>
 import { onMounted, ref, computed } from "vue";
+import Loader from "../components/Loader.vue";
 import { useIndianMoviesStore } from "../stores/indian-movies";
 import httpClient from "../plugins/interceptor";
 import SuspenseComponent from "../components/SuspenseComponent.vue";
