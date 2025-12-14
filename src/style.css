@@ -30,3 +30,39 @@ h2 {
   --color-info: #3498DB;
   --color-accent-dark: #8E44AD;
 }
+
+/* Define the DEFAULT Theme (e.g., 'crimson' theme) */
+body.theme-crimson {
+  --color-primary: #fc0362; /* Your current accent color */
+  --color-secondary: #4ECDC4;
+  --color-tertiary: #45B7D1;
+  --color-light: #FFF8E1;
+  --color-dark: #2C3E50;
+  /* Add all your custom variables here */
+}
+
+/* Define a SECONDARY Theme (e.g., 'ocean' theme) */
+body.theme-ocean {
+  --color-primary: #3498DB; /* Blue accent */
+  --color-secondary: #2ECC71;
+  --color-tertiary: #9B59B6;
+  --color-light: #ECF0F1;
+  --color-dark: #1E3A8A; /* Darker blue background for dark elements */
+}
+
+/* Define a THIRD Theme (e.g., 'forest' theme) */
+body.theme-forest {
+  --color-primary: #27AE60; /* Green accent */
+  --color-secondary: #F39C12;
+  --color-tertiary: #C0392B;
+  --color-light: #F0FFF0;
+  --color-dark: #1B5E20;
+}
+
+/* Base styles that use the variables */
+body {
+  /* Set base font/background, leveraging the variables */
+  font-family: 'Lato', sans-serif;
+  background-color: var(--color-light); /* Base background uses variable */
+  color: var(--color-dark); /* Base text uses variable */
+}

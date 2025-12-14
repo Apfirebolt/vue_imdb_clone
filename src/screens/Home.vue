@@ -15,6 +15,8 @@
             </p>
         </div>
 
+        <ChooseTheme class="mt-8 mx-auto max-w-2xl" />
+
         <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h3 class="text-xl font-semibold text-primary mb-4">Types</h3>
@@ -94,7 +96,9 @@
 import { onMounted, computed, ref } from "vue";
 import { useConfigStore } from "../stores/config";
 import { useRouter } from "vue-router";
+import { useTheme } from "../composables/useTheme";
 import Loader from "../components/Loader.vue";
+import ChooseTheme from "../components/ChooseTheme.vue";
 
 const configStore = useConfigStore();
 const router = useRouter();

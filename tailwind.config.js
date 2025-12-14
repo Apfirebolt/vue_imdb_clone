@@ -4,6 +4,12 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      colors: {
+        'primary': 'var(--color-primary)',
+        'secondary': 'var(--color-secondary)',
+        'dark': 'var(--color-dark)',
+        'light': 'var(--color-light)',
+      },
     },
   },
   plugins: [],
