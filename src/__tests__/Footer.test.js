@@ -1,29 +1,67 @@
-import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
-import Footer from '../components/FooterComponent.vue'
+// Footer.spec.ts
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { mount } from "@vue/test-utils";
+import Footer from "../components/FooterComponent.vue";
 
-describe('Footer Component', () => {
-    it('renders the footer with the correct text', () => {
-        const wrapper = mount(Footer)
-        const currentYear = new Date().getFullYear()
-        expect(wrapper.text()).toContain(`© ${currentYear} Vue Dinosaurs Built with Vue 3 and Tailwind CSS`)
-    })
+describe("Footer.vue", () => {
+  beforeEach(() => {
+    // Lock the system clock to a fixed year to make date assertions deterministic
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-08-15"));
+  });
 
-    it('has the correct classes applied', () => {
-        const wrapper = mount(Footer)
-        const footer = wrapper.find('footer')
-        expect(footer.classes()).toContain('py-10')
-        expect(footer.classes()).toContain('px-8')
-        expect(footer.classes()).toContain('bg-secondary')
-        expect(footer.classes()).toContain('text-light')
-        expect(footer.classes()).toContain('dark:bg-slate-700')
-        expect(footer.classes()).toContain('dark:text-white')
-    })
+  afterEach(() => {
+    vi.useRealTimers();
+  });
 
-    it('contains a paragraph with the correct text alignment and size', () => {
-        const wrapper = mount(Footer)
-        const paragraph = wrapper.find('p')
-        expect(paragraph.classes()).toContain('text-center')
-        expect(paragraph.classes()).toContain('text-sm')
-    })
-})
+  it("renders the branding and description correctly", () => {
+    const wrapper = mount(Footer);
+
+    expect(wrapper.text()).toContain("VUE");
+    expect(wrapper.text()).toContain("MovieDB");
+    expect(wrapper.text()).toContain(
+      "Discover trending movies, top-rated TV shows, and regional cinema."
+    );
+  });
+
+  it("renders all major navigation column headers", () => {
+    const wrapper = mount(Footer);
+
+    const headers = wrapper.findAll("h3").map((h) => h.text().trim());
+    expect(headers).toEqual(["Movies", "TV Shows", "Indian Cinema"]);
+  });
+
+  it("renders expected navigation links", () => {
+    const wrapper = mount(Footer);
+
+    const expectedLinks = [
+      "Popular Movies",
+      "Top Rated",
+      "Upcoming Releases",
+      "Now Playing",
+      "Popular Shows",
+      "Currently Airing",
+      "TV Schedule",
+      "Bollywood Hits",
+      "South Indian",
+      "Regional Releases",
+      "Trending Dubbed",
+      "Privacy Policy",
+      "Terms of Service",
+      "API Status",
+    ];
+
+    const links = wrapper.findAll("a").map((a) => a.text().trim());
+
+    expectedLinks.forEach((linkText) => {
+      expect(links).toContain(linkText);
+    });
+  });
+
+  it("computes and displays the dynamic current year in the copyright notice", () => {
+    const wrapper = mount(Footer);
+
+    const currentYear = new Date().getFullYear().toString();
+    expect(wrapper.text()).toContain(`© ${currentYear} Vue MovieDB. All rights reserved.`);
+  });
+});
