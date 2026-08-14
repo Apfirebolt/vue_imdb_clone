@@ -7,7 +7,7 @@ import { useIndianMoviesStore } from "../stores/indian-movies";
 import Loader from "../components/Loader.vue";
 
 describe("IndianMovies.vue", () => {
-  const createMockMovie = (id, number, title, rating = "8.5") => ({
+  const createMockMovie = (id, title, rating = "8.5") => ({
     id,
     primaryTitle: title,
     primaryImage: "https://example.com/poster.jpg",
