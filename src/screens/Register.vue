@@ -185,7 +185,9 @@
 import { ref } from "vue";
 import Loader from "../components/Loader.vue";
 
-const fullName = ref("");
+const firstName = ref("");
+const lastName = ref("");
+const username = ref("");
 const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
@@ -203,7 +205,9 @@ const handleRegister = async () => {
   try {
     // Add your registration logic here
     console.log("Registration attempt:", {
-      fullName: fullName.value,
+      firstName: firstName.value,
+      lastName: lastName.value,
+      username: username.value,
       email: email.value,
       password: password.value,
       agreeTerms: agreeTerms.value,
