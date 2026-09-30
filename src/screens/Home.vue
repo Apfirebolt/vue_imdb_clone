@@ -95,14 +95,10 @@
 <script setup>
 import { onMounted, computed, ref } from "vue";
 import { useConfigStore } from "../stores/config";
-import { useRouter } from "vue-router";
-import { useTheme } from "../composables/useTheme";
 import Loader from "../components/Loader.vue";
 import ChooseTheme from "../components/ChooseTheme.vue";
 
 const configStore = useConfigStore();
-const router = useRouter();
-const searchText = ref("");
 
 const isLoading = computed(() => configStore.isLoading);
 const types = computed(() => configStore.getTypes);
