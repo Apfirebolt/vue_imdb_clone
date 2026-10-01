@@ -71,7 +71,7 @@ describe("IndianMovies.vue", () => {
       },
     });
 
-    expect(wrapper.find("h1").text()).toBe("Indian Movies");
+    expect(wrapper.find("h1").text()).toBe("Indian Cinema Hub");
     expect(wrapper.text()).toContain("Leo");
     expect(wrapper.text()).toContain("⭐ 7.8");
     expect(wrapper.find('img[src="https://example.com/poster.jpg"]').exists()).toBe(true);
@@ -116,7 +116,7 @@ describe("IndianMovies.vue", () => {
     // Switch to Top Rated (All Indian)
     const topRatedBtn = wrapper
       .findAll("button")
-      .find((b) => b.text().trim() === "Top Rated");
+      .find((b) => b.text().trim() === "Top Rated Global");
     await topRatedBtn?.trigger("click");
     expect(wrapper.text()).toContain("3 Idiots");
 

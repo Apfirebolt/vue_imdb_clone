@@ -7,9 +7,9 @@ describe("About.vue", () => {
   it("renders the component container with proper CSS classes", () => {
     const wrapper = mount(About);
 
-    const rootDiv = wrapper.find("div");
-    expect(rootDiv.classes()).toContain("min-h-screen");
-    expect(rootDiv.classes()).toContain("flex");
+    const root = wrapper.find("main");
+    expect(root.classes()).toContain("min-h-screen");
+    expect(root.classes()).toContain("flex");
   });
 
   it("renders the main heading correctly", () => {

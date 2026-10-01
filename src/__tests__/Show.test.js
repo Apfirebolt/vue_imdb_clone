@@ -63,7 +63,7 @@ describe("Shows.vue", () => {
       },
     });
 
-    expect(wrapper.find("h1").text()).toBe("Shows");
+    expect(wrapper.find("h1").text()).toBe("Shows Hub");
     expect(wrapper.text()).toContain("Stranger Things");
     expect(wrapper.text()).toContain("⭐ 8.7");
     expect(wrapper.text()).toContain("TV-MA");

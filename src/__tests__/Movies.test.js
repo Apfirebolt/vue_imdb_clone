@@ -24,7 +24,20 @@ describe("MoviesView.vue", () => {
       top250Movies: [mockMovie(3, "The Godfather", "9.2")],
       mostPopularMovies: [mockMovie(4, "Dune Part Two", "8.6")],
       topBoxOfficeMovies: [mockMovie(5, "Avatar", "7.9")],
-      upcomingMovies: [mockMovie(6, "Upcoming Blockbuster", "N/A")],
+      upcomingMovies: [
+        {
+          id: 6,
+          titles: [
+            {
+              primaryImage: "https://example.com/poster.jpg",
+              description: "Upcoming Blockbuster",
+              releaseDate: "2026-01-01",
+              averageRating: "N/A",
+              contentRating: "PG-13",
+            },
+          ],
+        },
+      ],
       searchMovies: [mockMovie(7, "Inception", "8.8")],
       loading: false,
     },
@@ -116,7 +129,7 @@ describe("MoviesView.vue", () => {
     // Switch to Top Box Office Tab
     const boxOfficeTabBtn = wrapper
       .findAll("button")
-      .find((b) => b.text().trim() === "Top Box Office");
+      .find((b) => b.text().trim() === "Box Office");
     await boxOfficeTabBtn?.trigger("click");
     expect(wrapper.text()).toContain("Avatar");
   });
@@ -140,16 +153,14 @@ describe("MoviesView.vue", () => {
     // Switch to Search Tab
     const searchTabBtn = wrapper
       .findAll("button")
-      .find((b) => b.text().trim() === "Search Movie");
+      .find((b) => b.text().trim() === "Search");
     await searchTabBtn?.trigger("click");
 
     const searchInput = wrapper.find('input[placeholder="Search for movies..."]');
     await searchInput.setValue("Inception");
 
     // Click search button
-    const searchSubmitBtn = wrapper
-      .findAll("button")
-      .find((b) => b.text().trim() === "Search");
+    const searchSubmitBtn = wrapper.find(".space-y-6 button");
     await searchSubmitBtn?.trigger("click");
 
     expect(store.getSearchMoviesAction).toHaveBeenCalledWith("Inception");
@@ -175,7 +186,7 @@ describe("MoviesView.vue", () => {
     // Switch to Upcoming Movies Tab
     const upcomingTabBtn = wrapper
       .findAll("button")
-      .find((b) => b.text().trim() === "Upcoming Movies");
+      .find((b) => b.text().trim() === "Upcoming");
     await upcomingTabBtn?.trigger("click");
 
     const countryInput = wrapper.find(

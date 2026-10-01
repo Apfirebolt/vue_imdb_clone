@@ -239,9 +239,8 @@ const getUpcomingMovies = async () => {
   await movieStore.getUpcomingMoviesByCountryAction(code);
 };
 
-onMounted(async () => {
-  // Load initial data without racing issues
-  await movieStore.getTopRatedAction();
+onMounted(() => {
+  movieStore.getTopRatedAction();
   movieStore.getLowestRatedAction();
   movieStore.getTop250Action();
   movieStore.getMostPopularAction();
