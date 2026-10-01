@@ -1,6 +1,8 @@
 <template>
     <div class="flex items-center justify-center min-h-screen">
         <div class="loader"></div>
+        <slot name="default"></slot>
+        <slot name="movies"></slot>
     </div>
 </template>
 

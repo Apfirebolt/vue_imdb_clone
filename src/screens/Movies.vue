@@ -1,5 +1,7 @@
 <template>
-  <Loader v-if="loading" />
+  <Loader #movies v-if="loading">
+    <p class="text-info text-3xl mt-6 font-semibold">Fetching Movies...</p>
+  </Loader>
   
   <div v-else class="min-h-screen bg-info py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
     <div class="max-w-7xl w-full bg-white shadow-xl rounded-2xl p-6 sm:p-10">
