@@ -1,150 +1,121 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
 import httpClient from "../plugins/interceptor";
 
 export const useMovieStore = defineStore("movie", {
   state: () => ({
-    searchMovies: ref([]),
-    upcomingMovies: ref([]),
-    topRatedMovies: ref([]),
-    lowestRatedMovies: ref([]),
-    top250Movies: ref([]),
-    mostPopularMovies: ref([]),
-    topRatedEnglishMovies: ref([]),
-    topBoxOfficeMovies: ref([]),
-    loading: ref(false),
+    searchMovies: [],
+    upcomingMovies: [],
+    topRatedMovies: [],
+    lowestRatedMovies: [],
+    top250Movies: [],
+    mostPopularMovies: [],
+    topRatedEnglishMovies: [],
+    topBoxOfficeMovies: [],
+    loading: false,
   }),
 
   getters: {
-    getSearchMovies() {
-      return this.searchMovies;
-    },
-    getUpcomingMovies() {
-      return this.upcomingMovies;
-    },
-    getTopRatedMovies() {
-      return this.topRatedMovies;
-    },
-    getLowestRatedMovies() {
-      return this.lowestRatedMovies;
-    },
-    getTop250Movies() {
-      return this.top250Movies;
-    },
-    getMostPopularMovies() {
-      return this.mostPopularMovies;
-    },
-    getTopRatedEnglishMovies() {
-      return this.topRatedEnglishMovies;
-    },
-    getTopBoxOfficeMovies() {
-      return this.topBoxOfficeMovies;
-    },
-    isLoading() {
-      return this.loading;
-    },
+    getSearchMovies: (state) => state.searchMovies,
+    getUpcomingMovies: (state) => state.upcomingMovies,
+    getTopRatedMovies: (state) => state.topRatedMovies,
+    getLowestRatedMovies: (state) => state.lowestRatedMovies,
+    getTop250Movies: (state) => state.top250Movies,
+    getMostPopularMovies: (state) => state.mostPopularMovies,
+    getTopRatedEnglishMovies: (state) => state.topRatedEnglishMovies,
+    getTopBoxOfficeMovies: (state) => state.topBoxOfficeMovies,
+    isLoading: (state) => state.loading,
   },
 
   actions: {
-    async getSearchMoviesAction(query, page = 1) {
+    async getSearchMoviesAction(query) {
       try {
         this.loading = true;
         const response = await httpClient.get(`imdb/autocomplete?query=${query}`);
-        this.searchMovies = response.data;
+        this.searchMovies = Array.isArray(response.data) ? response.data : (response.data.results || []);
       } catch (error) {
-        console.log(error);
-        return error;
+        console.error(error);
       } finally {
         this.loading = false;
       }
     },
-    async getTopRatedAction(page = 1) {
+    async getTopRatedAction() {
       try {
         this.loading = true;
         const response = await httpClient.get('imdb/top-rated-english-movies');
-        this.topRatedMovies = response.data;
+        this.topRatedMovies = Array.isArray(response.data) ? response.data : (response.data.results || []);
       } catch (error) {
-        console.log(error);
-        return error;
+        console.error(error);
       } finally {
         this.loading = false;
       }
     },
-
-    async getLowestRatedAction(page = 1) {
+    async getTopRatedEnglishAction() {
+      try {
+        this.loading = true;
+        const response = await httpClient.get('imdb/top-rated-english-movies');
+        this.topRatedEnglishMovies = Array.isArray(response.data) ? response.data : (response.data.results || []);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    async getLowestRatedAction() {
       try {
         this.loading = true;
         const response = await httpClient.get('imdb/lowest-rated-movies');
-        this.lowestRatedMovies = response.data;
+        this.lowestRatedMovies = Array.isArray(response.data) ? response.data : (response.data.results || []);
       } catch (error) {
-        console.log(error);
-        return error;
+        console.error(error);
       } finally {
         this.loading = false;
       }
     },
-
     async getTop250Action() {
       try {
         this.loading = true;
         const response = await httpClient.get('imdb/top250-movies');
-        console.log(response.data);
-        this.top250Movies = response.data;
+        this.top250Movies = Array.isArray(response.data) ? response.data : (response.data.results || []);
       } catch (error) {
-        console.log(error);
-        return error;
+        console.error(error);
       } finally {
         this.loading = false;
       }
     },
-
-    async getMostPopularAction(page = 1) {
+    async getMostPopularAction() {
       try {
         this.loading = true;
         const response = await httpClient.get('imdb/most-popular-movies');
-        this.mostPopularMovies = response.data;
+        this.mostPopularMovies = Array.isArray(response.data) ? response.data : (response.data.results || []);
       } catch (error) {
-        console.log(error);
-        return error;
+        console.error(error);
       } finally {
         this.loading = false;
       }
     },
-
-    async getTopBoxOfficeMoviesAction(page = 1) {
+    async getTopBoxOfficeMoviesAction() {
       try {
         this.loading = true;
         const response = await httpClient.get('imdb/top-box-office');
-        this.topBoxOfficeMovies = response.data;
+        this.topBoxOfficeMovies = Array.isArray(response.data) ? response.data : (response.data.results || []);
       } catch (error) {
-        console.log(error);
-        return error;
+        console.error(error);
       } finally {
         this.loading = false;
       }
     },
-
-    async getUpcomingMoviesByCountryAction(countryCode, page = 1) {
+    async getUpcomingMoviesByCountryAction(countryCode) {
       try {
         this.loading = true;
         const response = await httpClient.get(`imdb/upcoming-releases?countryCode=${countryCode}&type=MOVIE`);
-        this.upcomingMovies = response.data;
+        // Safely extract array regardless of whether API returns direct array or wrapped object
+        const raw = response.data;
+        this.upcomingMovies = Array.isArray(raw) ? raw : (raw.results || raw.movies || []);
       } catch (error) {
-        console.log(error);
-        return error;
+        console.error("Error fetching upcoming movies:", error);
       } finally {
         this.loading = false;
       }
-    },
-
-    resetMovieData() {
-      this.topRatedMovies = [];
-      this.lowestRatedMovies = [];
-      this.top250Movies = [];
-      this.mostPopularMovies = [];
-      this.topRatedEnglishMovies = [];
-      this.upcomingMovies = [];
-      this.searchMovies = [];
     },
   },
 });

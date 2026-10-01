@@ -112,21 +112,21 @@
             >
               <div class="relative h-64 overflow-hidden bg-gray-200">
                 <img
-                  v-if="movie.primaryImage"
-                  :src="movie.primaryImage"
-                  :alt="movie.primaryTitle || movie.title"
+                  v-if="movie.titles[0].primaryImage"
+                  :src="movie.titles[0].primaryImage"
+                  :alt="movie.titles[0].primaryImage || movie.title"
                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div v-else class="flex items-center justify-center h-full text-gray-400 text-sm">No Image Available</div>
               </div>
               <div class="p-5 flex flex-col flex-grow">
-                <h3 class="font-bold text-lg text-gray-900 mb-1 line-clamp-1">{{ movie.primaryTitle || movie.title }}</h3>
-                <p class="text-xs font-medium text-gray-500 mb-3">{{ movie.releaseDate || movie.release_date || 'Release date TBA' }}</p>
-                <p v-if="movie.description" class="text-sm text-gray-600 mb-4 line-clamp-3 leading-relaxed">{{ movie.description }}</p>
+                <h3 class="font-bold text-lg text-gray-900 mb-1 line-clamp-1">{{ movie.titles[0].description || movie.title }}</h3>
+                <p class="text-xs font-medium text-gray-500 mb-3">{{ movie.titles[0].releaseDate || 'Release date TBA' }}</p>
+                <p v-if="movie.titles[0].description" class="text-sm text-gray-600 mb-4 line-clamp-3 leading-relaxed">{{ movie.titles[0].description }}</p>
                 <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100 text-xs">
-                  <span v-if="movie.averageRating" class="bg-purple-50 text-purple-800 font-semibold px-2.5 py-1 rounded-md">⭐ {{ movie.averageRating }}</span>
+                  <span v-if="movie.titles[0].averageRating" class="bg-purple-50 text-purple-800 font-semibold px-2.5 py-1 rounded-md">⭐ {{ movie.titles[0].averageRating }}</span>
                   <span v-else class="text-gray-400">Unrated</span>
-                  <span v-if="movie.contentRating" class="bg-gray-100 text-gray-700 font-medium px-2.5 py-1 rounded-md">{{ movie.contentRating }}</span>
+                  <span v-if="movie.titles[0].contentRating" class="bg-gray-100 text-gray-700 font-medium px-2.5 py-1 rounded-md">{{ movie.titles[0].contentRating }}</span>
                 </div>
               </div>
             </div>
@@ -184,7 +184,7 @@ import Loader from "../components/Loader.vue";
 
 const movieStore = useMovieStore();
 const searchQuery = ref("");
-const countryCode = ref("");
+const countryCode = ref("US");
 const selectedTab = ref("topRated");
 
 const tabs = [
@@ -198,32 +198,34 @@ const tabs = [
   { id: 'searchMovie', label: 'Search' }
 ];
 
-const movieResults = computed(() => movieStore.getSearchMovies);
-const upComingMovies = computed(() => movieStore.getUpcomingMovies);
+const movieResults = computed(() => movieStore.getSearchMovies || []);
+const upComingMovies = computed(() => movieStore.getUpcomingMovies || []);
 const loading = computed(() => movieStore.isLoading);
 
-// Dynamic mapping of standard tabs to Pinia store getters
 const currentMovies = computed(() => {
   switch (selectedTab.value) {
-    case 'topRated': return movieStore.getTopRatedMovies;
-    case 'lowestRated': return movieStore.getLowestRatedMovies;
-    case 'top250': return movieStore.getTop250Movies;
-    case 'mostPopular': return movieStore.getMostPopularMovies;
-    case 'topBoxOffice': return movieStore.getTopBoxOfficeMovies;
-    case 'topRatedEnglish': return movieStore.getTopRatedEnglishMovies;
+    case 'topRated': return movieStore.getTopRatedMovies || [];
+    case 'lowestRated': return movieStore.getLowestRatedMovies || [];
+    case 'top250': return movieStore.getTop250Movies || [];
+    case 'mostPopular': return movieStore.getMostPopularMovies || [];
+    case 'topBoxOffice': return movieStore.getTopBoxOfficeMovies || [];
+    case 'topRatedEnglish': return movieStore.getTopRatedEnglishMovies || [];
     default: return [];
   }
 });
 
-// Dynamic badge styling based on category
 const ratingBadgeClass = computed(() => {
   if (selectedTab.value === 'lowestRated') return 'bg-red-50 text-red-800';
   if (selectedTab.value === 'topBoxOffice') return 'bg-green-50 text-green-800';
   return 'bg-amber-50 text-amber-800';
 });
 
-const changeTab = (tab) => {
+const changeTab = async (tab) => {
   selectedTab.value = tab;
+  // If user clicks the upcoming tab and data is empty, trigger fetch
+  if (tab === 'upcomingMovies' && upComingMovies.value.length === 0) {
+    await getUpcomingMovies();
+  }
 };
 
 const searchMovies = async () => {
@@ -233,17 +235,18 @@ const searchMovies = async () => {
 };
 
 const getUpcomingMovies = async () => {
-  if (countryCode.value.trim()) {
-    await movieStore.getUpcomingMoviesByCountryAction(countryCode.value);
-  }
+  const code = countryCode.value.trim() || 'US';
+  await movieStore.getUpcomingMoviesByCountryAction(code);
 };
 
-onMounted(() => {
-  movieStore.getTopRatedAction();
+onMounted(async () => {
+  // Load initial data without racing issues
+  await movieStore.getTopRatedAction();
   movieStore.getLowestRatedAction();
   movieStore.getTop250Action();
   movieStore.getMostPopularAction();
   movieStore.getTopBoxOfficeMoviesAction();
+  movieStore.getTopRatedEnglishAction();
   movieStore.getUpcomingMoviesByCountryAction('US');
 });
 </script>
