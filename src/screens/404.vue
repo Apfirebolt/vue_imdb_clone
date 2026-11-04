@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-h-screen flex items-center justify-center bg-secondary text-slate-100 overflow-hidden px-6 py-12 selection:bg-amber-500 selection:text-slate-950">
+  <div v-once class="relative min-h-screen flex items-center justify-center bg-secondary text-slate-100 overflow-hidden px-6 py-12 selection:bg-amber-500 selection:text-slate-950">
     
     <!-- Ambient Background Glows -->
     <div class="absolute top-1/4 -left-20 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>

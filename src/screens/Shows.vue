@@ -9,7 +9,7 @@
         <h1 class="text-4xl font-extrabold text-primary tracking-tight mb-2">
           Shows Hub
         </h1>
-        <p class="text-dark leading-relaxed max-w-3xl text-base sm:text-lg">
+        <p class="text-dark leading-relaxed text-base sm:text-lg">
           Welcome to the Shows section! Here, you can explore a wide variety of series from different genres and eras. Whether you're a fan of action, drama, comedy, or documentaries, there's something for everyone.
         </p>
       </div>
